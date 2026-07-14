@@ -120,10 +120,10 @@ export default function HomePage() {
           </div>
           <a
             className="workflow-image-link"
-            href="/assets/ai-workflow.png"
+            href="/ai-ui-ux-workflow.html"
             target="_blank"
             rel="noreferrer"
-            aria-label="在新窗口查看完整 AI UI UX 工作流"
+            aria-label="在新窗口打开 AI UI UX 工作流页面"
             data-reveal
           >
             <img src="/assets/ai-workflow-sales-service.png" width="2574" height="1204" loading="lazy" decoding="async" alt="销售服务平台 AI 工作流可视化图" />

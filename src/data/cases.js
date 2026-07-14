@@ -2,7 +2,7 @@ const numberedImages = (directory, count, extension) =>
   Array.from({ length: count }, (_, index) => `/assets/${directory}/${index + 1}.${extension}`);
 
 const aiCompanionImages = Array.from(
-  { length: 39 },
+  { length: 38 },
   (_, index) => `/assets/ai-companion-detail/AIGC分享01 3.${String(index + 1).padStart(3, "0")}.jpeg`,
 );
 

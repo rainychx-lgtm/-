@@ -45,5 +45,6 @@ npm run preview
 - 首页内容与工作流：`src/pages/HomePage.jsx`
 - 全局视觉样式：`src/styles.css`
 - 所有图片素材：`public/assets/`
+- AI UI/UX 工作流独立页面：`public/ai-ui-ux-workflow.html`
 
 首页视频目前使用外部 CloudFront 地址。若要完全自托管，可将视频放入 `public/assets/`，再修改 `src/pages/HomePage.jsx` 中的 `video src`。

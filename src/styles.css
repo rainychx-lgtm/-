@@ -1217,14 +1217,14 @@ h3 {
 
 .case-gallery img {
   width: 100%;
+  height: auto;
+  object-fit: contain;
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   background: var(--glass-bg);
   box-shadow: var(--glass-shadow);
   backdrop-filter: blur(var(--glass-blur));
   -webkit-backdrop-filter: blur(var(--glass-blur));
-  aspect-ratio: 16 / 9;
-  object-fit: cover;
 }
 
 .not-found {

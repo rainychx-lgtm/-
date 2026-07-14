@@ -1,0 +1,1043 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="销售服务平台 AI 工作流说明：围绕学情观察、学习进度、出勤跟进、续报管理、家长维系、学生服务与服务复盘，形成从需求到可演示版本的 UI/UX 设计与研发协作闭环。" />
+  <title>销售服务平台 · AI 服务工作流与 UI/UX 设计闭环</title>
+  <style>
+    :root {
+      --bg: #060b16;
+      --bg-2: #0b1224;
+      --surface: rgba(10, 20, 38, 0.78);
+      --surface-strong: rgba(16, 28, 52, 0.92);
+      --surface-soft: rgba(255, 255, 255, 0.045);
+      --text: #eef6ff;
+      --muted: #a7b6cf;
+      --subtle: #72809a;
+      --line: rgba(148, 163, 184, 0.18);
+      --line-strong: rgba(125, 211, 252, 0.34);
+      --primary: #22d3ee;
+      --primary-2: #8b5cf6;
+      --secondary: #a3e635;
+      --accent: #facc15;
+      --hot: #fb7185;
+      --ink: #f8fbff;
+      --deep: #020617;
+      --shadow: 0 30px 100px rgba(0, 0, 0, 0.42);
+      --soft-shadow: 0 18px 54px rgba(0, 0, 0, 0.28);
+      --glow-cyan: 0 0 40px rgba(34, 211, 238, 0.28);
+      --glow-lime: 0 0 36px rgba(163, 230, 53, 0.18);
+      --radius: 28px;
+      --radius-md: 20px;
+      --radius-sm: 14px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: "Space Grotesk", "DM Sans", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 18% 9%, rgba(34, 211, 238, 0.22), transparent 26%),
+        radial-gradient(circle at 82% 8%, rgba(139, 92, 246, 0.26), transparent 28%),
+        radial-gradient(circle at 72% 88%, rgba(163, 230, 53, 0.12), transparent 24%),
+        linear-gradient(135deg, var(--bg), var(--bg-2) 52%, #050814);
+      line-height: 1.68;
+      min-height: 100vh;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(125, 211, 252, 0.07) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(125, 211, 252, 0.055) 1px, transparent 1px);
+      background-size: 42px 42px;
+      mask-image: linear-gradient(to bottom, rgba(0,0,0,0.82), transparent 74%);
+    }
+
+    body::after {
+      content: "销售 / AI / 服务闭环";
+      position: fixed;
+      right: -6.5rem;
+      top: 36%;
+      pointer-events: none;
+      color: rgba(255, 255, 255, 0.045);
+      font-size: clamp(54px, 9vw, 128px);
+      font-weight: 900;
+      letter-spacing: -0.08em;
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+    }
+
+    a { color: inherit; }
+
+    .page {
+      width: min(1200px, calc(100% - 40px));
+      margin: 0 auto;
+      padding: 30px 0 64px;
+      position: relative;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 12px 14px 12px 16px;
+      border: 1px solid rgba(125, 211, 252, 0.22);
+      border-radius: 999px;
+      background: rgba(6, 11, 22, 0.74);
+      backdrop-filter: blur(24px);
+      position: sticky;
+      top: 18px;
+      z-index: 10;
+      box-shadow: var(--soft-shadow), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 900;
+      letter-spacing: -0.035em;
+      color: var(--ink);
+    }
+
+    .logo {
+      width: 38px;
+      height: 38px;
+      border-radius: 14px;
+      background:
+        linear-gradient(135deg, rgba(34, 211, 238, 0.95), rgba(139, 92, 246, 0.92));
+      display: grid;
+      place-items: center;
+      color: #03101a;
+      font-size: 13px;
+      font-weight: 950;
+      box-shadow: var(--glow-cyan);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 6px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      padding: 9px 12px;
+      border-radius: 999px;
+      transition: color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+    }
+
+    .nav-links a:hover,
+    .nav-links a:focus-visible {
+      color: var(--secondary);
+      background: rgba(163, 230, 53, 0.09);
+      outline: none;
+    }
+
+    .hero {
+      padding: 92px 0 48px;
+      display: grid;
+      grid-template-columns: 1.06fr 0.94fr;
+      gap: 42px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 13px;
+      border: 1px solid rgba(163, 230, 53, 0.30);
+      background: rgba(163, 230, 53, 0.08);
+      color: #d9ff7a;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 850;
+      margin-bottom: 20px;
+      box-shadow: var(--glow-lime);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(42px, 6.1vw, 76px);
+      line-height: 0.98;
+      letter-spacing: -0.074em;
+    }
+
+    .gradient-text {
+      background:
+        linear-gradient(95deg, #ffffff 0%, #b8f7ff 34%, #d8c6ff 64%, #d9ff7a 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-shadow: 0 0 48px rgba(34, 211, 238, 0.12);
+    }
+
+    .hero p {
+      margin: 24px 0 0;
+      color: var(--muted);
+      font-size: 18px;
+      max-width: 700px;
+    }
+
+    .hero strong { color: #ffffff; }
+
+    .hero-actions {
+      margin-top: 30px;
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 46px;
+      gap: 10px;
+      text-decoration: none;
+      padding: 13px 18px;
+      border-radius: 999px;
+      font-weight: 850;
+      border: 1px solid transparent;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+      cursor: pointer;
+    }
+
+    .button:hover { transform: translateY(-2px); }
+    .button:focus-visible { outline: 3px solid rgba(34, 211, 238, 0.34); outline-offset: 3px; }
+
+    .button.primary {
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: #021018;
+      box-shadow: 0 20px 46px rgba(34, 211, 238, 0.22), 0 0 0 1px rgba(255,255,255,0.12) inset;
+    }
+
+    .button.secondary {
+      color: var(--text);
+      border-color: rgba(125, 211, 252, 0.24);
+      background: rgba(255, 255, 255, 0.055);
+    }
+
+    .button.secondary:hover {
+      border-color: rgba(163, 230, 53, 0.34);
+      background: rgba(163, 230, 53, 0.08);
+    }
+
+    .hero-card {
+      border: 1px solid rgba(125, 211, 252, 0.24);
+      background:
+        linear-gradient(180deg, rgba(16, 28, 52, 0.88), rgba(5, 10, 22, 0.82));
+      border-radius: var(--radius);
+      padding: 22px;
+      box-shadow: var(--shadow), var(--glow-cyan);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-card::before {
+      content: "";
+      position: absolute;
+      inset: -1px;
+      background:
+        linear-gradient(115deg, rgba(34, 211, 238, 0.16), transparent 34%, rgba(163, 230, 53, 0.12)),
+        radial-gradient(circle at 84% 18%, rgba(139, 92, 246, 0.24), transparent 34%);
+      pointer-events: none;
+    }
+
+    .platform-panel {
+      position: relative;
+      border-radius: 22px;
+      background: rgba(2, 6, 23, 0.76);
+      color: #eef4ff;
+      border: 1px solid rgba(255, 255, 255, 0.13);
+      overflow: hidden;
+    }
+
+    .platform-panel::after {
+      content: "";
+      position: absolute;
+      inset: auto 18px 0 18px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(163, 230, 53, 0.75), transparent);
+    }
+
+    .panel-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.10);
+      background: rgba(255, 255, 255, 0.035);
+    }
+
+    .panel-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 850;
+    }
+
+    .panel-badge {
+      padding: 5px 9px;
+      border-radius: 999px;
+      font-size: 12px;
+      color: #d9ff7a;
+      background: rgba(163, 230, 53, 0.10);
+      border: 1px solid rgba(163, 230, 53, 0.30);
+    }
+
+    .panel-body {
+      padding: 18px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .ai-row {
+      display: grid;
+      grid-template-columns: 28px 1fr;
+      gap: 10px;
+      align-items: start;
+      padding: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .ai-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+      font-size: 12px;
+      font-weight: 900;
+      color: #021018;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+    }
+
+    .ai-row strong {
+      display: block;
+      color: #ffffff;
+      font-size: 14px;
+      line-height: 1.35;
+    }
+
+    .ai-row span {
+      display: block;
+      margin-top: 3px;
+      color: #b8c4dd;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 16px;
+      position: relative;
+    }
+
+    .stat {
+      border: 1px solid rgba(125, 211, 252, 0.20);
+      border-radius: 18px;
+      padding: 15px;
+      background: rgba(255, 255, 255, 0.055);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07);
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 24px;
+      line-height: 1;
+      color: var(--secondary);
+      letter-spacing: -0.04em;
+    }
+
+    .stat span {
+      display: block;
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    section { padding: 46px 0; }
+
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+
+    .section-head h2 {
+      margin: 0;
+      font-size: clamp(28px, 4vw, 46px);
+      letter-spacing: -0.058em;
+      line-height: 1.08;
+      color: var(--ink);
+    }
+
+    .section-head p {
+      margin: 0;
+      color: var(--muted);
+      max-width: 560px;
+    }
+
+    .grid {
+      display: grid;
+      gap: 18px;
+    }
+
+    .grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+    .grid.cols-2 { grid-template-columns: repeat(2, 1fr); }
+    .grid.cols-4 { grid-template-columns: repeat(4, 1fr); }
+
+    .card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 24px;
+      background:
+        linear-gradient(180deg, rgba(16, 28, 52, 0.78), rgba(7, 13, 27, 0.72));
+      backdrop-filter: blur(18px);
+      box-shadow: var(--soft-shadow), inset 0 1px 0 rgba(255, 255, 255, 0.055);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(34, 211, 238, 0.42), transparent);
+      opacity: 0.7;
+    }
+
+    .card h3 {
+      margin: 0 0 10px;
+      font-size: 20px;
+      line-height: 1.24;
+      letter-spacing: -0.034em;
+      color: #ffffff;
+    }
+
+    .card p, .card li {
+      color: var(--muted);
+      margin: 0;
+    }
+
+    .card ul {
+      margin: 14px 0 0;
+      padding-left: 19px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 850;
+      margin-bottom: 14px;
+      color: var(--secondary);
+      background: rgba(163, 230, 53, 0.08);
+      border: 1px solid rgba(163, 230, 53, 0.20);
+    }
+
+    .highlight {
+      border-color: rgba(34, 211, 238, 0.32);
+      background:
+        linear-gradient(180deg, rgba(14, 43, 66, 0.86), rgba(9, 16, 32, 0.82));
+      box-shadow: var(--soft-shadow), var(--glow-cyan);
+    }
+
+    .workflow {
+      position: relative;
+      display: grid;
+      gap: 16px;
+    }
+
+    .workflow::before {
+      content: "";
+      position: absolute;
+      left: 45px;
+      top: 20px;
+      bottom: 20px;
+      width: 2px;
+      background: linear-gradient(to bottom, rgba(34, 211, 238, 0.18), rgba(163, 230, 53, 0.48), rgba(139, 92, 246, 0.22));
+      box-shadow: 0 0 24px rgba(163, 230, 53, 0.18);
+    }
+
+    .step {
+      display: grid;
+      grid-template-columns: 72px 1fr auto;
+      gap: 18px;
+      align-items: center;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 18px;
+      background: rgba(10, 20, 38, 0.78);
+      box-shadow: var(--soft-shadow), inset 0 1px 0 rgba(255, 255, 255, 0.055);
+      position: relative;
+    }
+
+    .step:hover {
+      border-color: rgba(125, 211, 252, 0.32);
+      background: rgba(13, 28, 52, 0.86);
+    }
+
+    .number {
+      width: 56px;
+      height: 56px;
+      border-radius: 18px;
+      display: grid;
+      place-items: center;
+      font-weight: 950;
+      font-size: 18px;
+      color: #021018;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      box-shadow: var(--glow-cyan), var(--glow-lime);
+      z-index: 1;
+    }
+
+    .step h3 {
+      margin: 0;
+      font-size: 20px;
+      letter-spacing: -0.034em;
+      color: #ffffff;
+    }
+
+    .step p {
+      margin: 4px 0 0;
+      color: var(--muted);
+    }
+
+    .output {
+      white-space: nowrap;
+      color: #d9ff7a;
+      background: rgba(163, 230, 53, 0.08);
+      border: 1px solid rgba(163, 230, 53, 0.24);
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 850;
+    }
+
+    .matrix {
+      overflow: hidden;
+      padding: 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+    }
+
+    th {
+      color: #ffffff;
+      background: rgba(34, 211, 238, 0.08);
+      font-size: 14px;
+    }
+
+    td {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    tr:last-child td { border-bottom: 0; }
+
+    .pill-list {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
+
+    .pill {
+      border: 1px solid rgba(125, 211, 252, 0.20);
+      background: rgba(255, 255, 255, 0.055);
+      border-radius: 999px;
+      padding: 8px 11px;
+      color: #c9d7ec;
+      font-size: 13px;
+      font-weight: 750;
+    }
+
+    .pill:nth-child(3n + 1) {
+      border-color: rgba(163, 230, 53, 0.22);
+      color: #d9ff7a;
+    }
+
+    .quote {
+      font-size: clamp(24px, 4vw, 40px);
+      line-height: 1.25;
+      letter-spacing: -0.048em;
+      margin: 0;
+      color: #ffffff;
+    }
+
+    .mini-flow {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .mini-flow span {
+      padding: 10px 8px;
+      border-radius: 16px;
+      text-align: center;
+      font-size: 13px;
+      font-weight: 850;
+      color: #021018;
+      background: linear-gradient(135deg, rgba(34, 211, 238, 0.95), rgba(163, 230, 53, 0.88));
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      box-shadow: 0 14px 34px rgba(34, 211, 238, 0.12);
+    }
+
+    .footer {
+      margin-top: 34px;
+      padding: 24px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      color: var(--muted);
+      background: rgba(10, 20, 38, 0.78);
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      flex-wrap: wrap;
+      box-shadow: var(--soft-shadow);
+    }
+
+    @media (max-width: 1020px) {
+      .hero { grid-template-columns: 1fr; padding-top: 62px; }
+      .grid.cols-4 { grid-template-columns: repeat(2, 1fr); }
+      .mini-flow { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    @media (max-width: 760px) {
+      .page { width: min(100% - 28px, 1200px); padding-top: 18px; }
+      .hero { padding-top: 46px; }
+      .grid.cols-3, .grid.cols-2, .grid.cols-4 { grid-template-columns: 1fr; }
+      .section-head { display: block; }
+      .section-head p { margin-top: 12px; }
+      .step { grid-template-columns: 56px 1fr; }
+      .output { grid-column: 2; justify-self: start; white-space: normal; }
+      .workflow::before { left: 45px; }
+      .nav { align-items: flex-start; border-radius: 22px; }
+      .nav-links { display: none; }
+      .stats { grid-template-columns: 1fr; }
+      .mini-flow { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { transition-duration: 0.001ms !important; animation-duration: 0.001ms !important; }
+    }
+
+    @media print {
+      body { background: #fff; color: #111827; }
+      body::before, body::after, .nav, .hero-actions { display: none; }
+      .card, .step, .hero-card, .footer { background: #fff; border-color: #d1d5db; box-shadow: none; }
+      .muted, .card p, .card li, td, .step p, .section-head p { color: #4b5563; }
+      .gradient-text { color: #111827; background: none; }
+      .section-head h2, .card h3, .step h3, .quote { color: #111827; }
+    }
+
+  </style>
+</head>
+<body>
+  <div class="page">
+    <nav class="nav" aria-label="页面导航">
+      <div class="brand"><span class="logo">销售</span> 销售服务平台 · AI 工作流</div>
+      <div class="nav-links">
+        <a href="#overview">概览</a>
+        <a href="#scenario">平台场景</a>
+        <a href="#flow">流程</a>
+        <a href="#standards">质量门禁</a>
+        <a href="#value">价值</a>
+      </div>
+    </nav>
+
+    <header class="hero" id="overview">
+      <div>
+        <div class="eyebrow">Sales Service Platform · AI Native Workflow</div>
+        <h1><span class="gradient-text">销售服务平台 AI 服务工作流与 UI/UX 设计闭环</span></h1>
+        <p>
+          这套 AI 工作流不是泛化的后台页面生成，而是围绕 <strong>销售服务平台</strong> 的真实服务业务展开：把客户、学生、学习情况、出勤记录、续报节点、家长沟通与最新需求放入 AI 上下文，快速生成可演示、可评审、可交付研发的销售服务端 Web 版本。
+        </p>
+        <div class="hero-actions">
+          <a class="button primary" href="#flow">查看销售服务平台流程 →</a>
+          <a class="button secondary" href="#scenario">查看服务关键词</a>
+        </div>
+      </div>
+
+      <aside class="hero-card" aria-label="销售服务平台 AI 工作流摘要">
+        <div class="platform-panel">
+          <div class="panel-top">
+            <div class="panel-title"><span class="logo" style="width:28px;height:28px;border-radius:10px;font-size:11px;">AI</span> 销售服务平台助手</div>
+            <div class="panel-badge">服务闭环在线</div>
+          </div>
+          <div class="panel-body">
+            <div class="ai-row">
+              <div class="ai-icon">01</div>
+              <div><strong>输入销售服务上下文</strong><span>代码库、历史 PRD、销售服务规范、客户/学生/学习/出勤/续报/沟通数据结构。</span></div>
+            </div>
+            <div class="ai-row">
+              <div class="ai-icon">02</div>
+              <div><strong>生成服务场景页面</strong><span>学情观察、学习进度、出勤跟进、续报管理、家长维系与学生服务复盘。</span></div>
+            </div>
+            <div class="ai-row">
+              <div class="ai-icon">03</div>
+              <div><strong>设计师走查并 Vibe Coding</strong><span>校准信息层级、销售服务任务路径、状态覆盖、组件复用与交互细节。</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="stats">
+          <div class="stat"><strong>6</strong><span>服务核心场景</span></div>
+          <div class="stat"><strong>8</strong><span>端到端节点</span></div>
+          <div class="stat"><strong>1</strong><span>服务平台闭环</span></div>
+        </div>
+      </aside>
+    </header>
+
+    <section id="scenario">
+      <div class="section-head">
+        <h2>这套工作流围绕销售服务平台展开</h2>
+        <p>所有 AI 产出都要回到销售与服务团队的真实工作：少一点泛化炫技，多一点学情观察、学习进度、出勤、续报与家长学生维系场景的可落地体验。</p>
+      </div>
+      <div class="grid cols-3">
+        <article class="card">
+          <span class="tag">平台定位</span>
+          <h3>销售服务平台</h3>
+          <p>面向销售、课程顾问与服务团队的 AI 服务工作台，承载学生学情观察、学习进度跟踪、出勤跟进、续报管理、家长沟通和学生维系。</p>
+        </article>
+        <article class="card highlight">
+          <span class="tag">AI 工作流</span>
+          <h3>从需求到可演示版本</h3>
+          <p>AI 读取销售服务平台代码库与业务规范，直接生成贴近真实上线形态的页面、交互、状态与评审说明。</p>
+        </article>
+        <article class="card">
+          <span class="tag">交付目标</span>
+          <h3>服务销售的一体化闭环</h3>
+          <p>把学生学习情况、出勤表现、续报节点、家长沟通、学生服务和跟进复盘串成完整链路，让销售与服务团队在同一平台完成关键维系任务。</p>
+        </article>
+      </div>
+      <div class="card highlight" style="margin-top:18px;">
+        <h3>销售服务平台关键词</h3>
+        <div class="pill-list" aria-label="销售服务平台关键词列表">
+          <span class="pill">销售服务平台</span>
+          <span class="pill">AI 服务工作流</span>
+          <span class="pill">学情观察</span>
+          <span class="pill">学习进度</span>
+          <span class="pill">出勤跟进</span>
+          <span class="pill">续报管理</span>
+          <span class="pill">家长维系</span>
+          <span class="pill">学生服务复盘</span>
+          <span class="pill">客户分层</span>
+          <span class="pill">学习记录</span>
+          <span class="pill">服务复盘</span>
+          <span class="pill">销售服务端 Web</span>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-head">
+        <h2>核心变化：从通用 UI 生成到销售服务业务闭环</h2>
+        <p>AI 不只是把页面做漂亮，而是要理解销售服务平台的角色、任务、数据和服务节奏。</p>
+      </div>
+      <div class="grid cols-3">
+        <article class="card">
+          <span class="tag">过去</span>
+          <h3>静态设计稿驱动</h3>
+          <p>主要输出 Figma/截图/标注，研发需要二次理解销售服务场景，容易遗漏出勤异常、学习波动、续报节点、家长沟通记录等关键逻辑。</p>
+        </article>
+        <article class="card highlight">
+          <span class="tag">现在</span>
+          <h3>AI + 销售服务平台代码库驱动</h3>
+          <p>AI 直接读取销售服务平台工程结构、组件体系和历史实现，生成可运行页面，让设计师在真实销售服务路径中评审体验。</p>
+        </article>
+        <article class="card">
+          <span class="tag">目标</span>
+          <h3>服务体验即原型，原型即代码</h3>
+          <p>让方案表达、服务路径验证、视觉校准和研发交接统一在同一个可演示版本中完成。</p>
+        </article>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-head">
+        <h2>销售服务平台的服务闭环</h2>
+        <p>UI 信息架构建议围绕销售与服务团队每天真正要完成的任务展开，而不是按技术模块堆砌功能。</p>
+      </div>
+      <div class="grid cols-3">
+        <article class="card">
+          <span class="tag">观察</span>
+          <h3>学情观察</h3>
+          <p>聚合学生学习表现、阶段目标、作业/练习结果和历史变化，帮助销售快速判断服务优先级。</p>
+        </article>
+        <article class="card">
+          <span class="tag">学习</span>
+          <h3>学习进度</h3>
+          <p>聚合学习记录、任务完成度、阶段反馈和薄弱项变化，帮助销售服务人员清晰判断学习进展。</p>
+        </article>
+        <article class="card">
+          <span class="tag">出勤</span>
+          <h3>出勤跟进</h3>
+          <p>跟踪到课、请假、缺勤、补课和异常趋势，支持及时提醒、回访和服务补救。</p>
+        </article>
+        <article class="card">
+          <span class="tag">续报</span>
+          <h3>续报管理</h3>
+          <p>结合学习表现、出勤稳定性、家长反馈和合同周期，提示续报机会、风险等级与跟进动作。</p>
+        </article>
+        <article class="card">
+          <span class="tag">维系</span>
+          <h3>家长维系</h3>
+          <p>复盘家长沟通记录、服务承诺、学生反馈和待办事项，让关系维护有节奏、有依据。</p>
+        </article>
+        <article class="card">
+          <span class="tag">复盘</span>
+          <h3>学生服务复盘</h3>
+          <p>复盘跟进结果、续报转化、服务问题和高价值话术，为下一轮家长与学生维系提供依据。</p>
+        </article>
+      </div>
+      <div class="mini-flow" aria-label="销售服务平台服务闭环路径">
+        <span>学情观察</span>
+        <span>学习进度</span>
+        <span>出勤跟进</span>
+        <span>续报管理</span>
+        <span>家长维系</span>
+        <span>学生服务复盘</span>
+      </div>
+    </section>
+
+    <section id="flow">
+      <div class="section-head">
+        <h2>销售服务平台 AI UI/UX 端到端流程</h2>
+        <p>每一步都明确输入、动作和产出，既方便对外解释，也方便团队内部复用为标准 SOP。</p>
+      </div>
+
+      <div class="workflow">
+        <div class="step">
+          <div class="number">01</div>
+          <div>
+            <h3>收集销售服务平台上下文</h3>
+            <p>准备销售服务平台 Git 代码库、历史 PRD、设计规范 .md、客户/学生/学习/出勤/续报/沟通等数据字典，以及本期最新需求。</p>
+          </div>
+          <div class="output">服务上下文包</div>
+        </div>
+
+        <div class="step">
+          <div class="number">02</div>
+          <div>
+            <h3>AI 理解销售服务角色与业务结构</h3>
+            <p>让 AI 先分析销售、课程顾问、服务顾问、主管等角色权限，梳理学情观察、学习进度、出勤跟进、续报管理、家长维系和学生服务复盘之间的业务关系。</p>
+          </div>
+          <div class="output">服务业务地图</div>
+        </div>
+
+        <div class="step">
+          <div class="number">03</div>
+          <div>
+            <h3>匹配平台组件与页面模式</h3>
+            <p>识别已有导航、表格、筛选器、客户/学生卡片、跟进记录、出勤状态、续报看板、沟通弹窗和表单模式，优先复用而不是重造。</p>
+          </div>
+          <div class="output">组件复用清单</div>
+        </div>
+
+        <div class="step">
+          <div class="number">04</div>
+          <div>
+            <h3>生成可演示销售服务端页面</h3>
+            <p>基于最新 PRD 生成销售服务平台页面、交互状态、空/加载/异常状态、路由入口、占位数据与必要样式调整。</p>
+          </div>
+          <div class="output">服务端 Demo</div>
+        </div>
+
+        <div class="step">
+          <div class="number">05</div>
+          <div>
+            <h3>按服务任务路径走查</h3>
+            <p>从学情观察、学习进度、出勤跟进、续报管理、家长维系到学生服务复盘完整走通，检查销售与服务人员是否能快速完成核心任务。</p>
+          </div>
+          <div class="output">体验问题清单</div>
+        </div>
+
+        <div class="step">
+          <div class="number">06</div>
+          <div>
+            <h3>Vibe Coding 快速修正</h3>
+            <p>设计师用自然语言指令和局部编辑持续调整布局、文案、信息层级、交互状态与组件细节，确保符合销售服务平台规范。</p>
+          </div>
+          <div class="output">修正版代码</div>
+        </div>
+
+        <div class="step">
+          <div class="number">07</div>
+          <div>
+            <h3>提交研发评审</h3>
+            <p>整理变更说明、销售服务场景意图、影响范围、权限/接口/数据边界和待确认点，提交 PR/MR 进入工程审核流程。</p>
+          </div>
+          <div class="output">PR/MR 说明</div>
+        </div>
+
+        <div class="step">
+          <div class="number">08</div>
+          <div>
+            <h3>上线回归与服务复盘</h3>
+            <p>研发审核代码质量、性能、安全与边界逻辑；上线后设计师和产品回归真实数据效果，并把经验沉淀回销售服务平台设计规范。</p>
+          </div>
+          <div class="output">上线闭环</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="standards">
+      <div class="section-head">
+        <h2>质量门禁与协作规范</h2>
+        <p>AI 负责提速，设计师负责体验判断，研发负责工程化把关；围绕销售服务平台场景建立清晰边界。</p>
+      </div>
+
+      <div class="card matrix">
+        <table>
+          <thead>
+            <tr>
+              <th>阶段</th>
+              <th>重点检查</th>
+              <th>通过标准</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>AI 生成前</td>
+              <td>销售服务平台需求是否完整、设计规范是否明确、代码库是否为最新版本、学习/出勤/续报/沟通数据结构是否可理解</td>
+              <td>AI 能读到真实项目上下文，并明确“复用现有组件优先”原则</td>
+            </tr>
+            <tr>
+              <td>服务路径评审</td>
+              <td>学情观察、学习进度、出勤跟进、续报管理、家长维系、学生服务复盘是否能连贯走通</td>
+              <td>核心服务任务可完整完成，关键状态和异常路径不阻塞</td>
+            </tr>
+            <tr>
+              <td>视觉与交互</td>
+              <td>信息层级、按钮优先级、表格密度、图表可读性、空状态、加载状态、错误提示和响应式表现</td>
+              <td>符合销售服务平台设计系统，销售与服务人员能快速理解下一步动作</td>
+            </tr>
+            <tr>
+              <td>Vibe Coding</td>
+              <td>局部修改是否影响现有功能，是否产生重复组件、临时样式或难维护逻辑</td>
+              <td>改动小、可解释、可回滚，尽量复用现有组件和设计 token</td>
+            </tr>
+            <tr>
+              <td>研发审核</td>
+              <td>代码质量、类型约束、接口边界、权限、安全、性能、数据脱敏和可维护性</td>
+              <td>符合团队工程规范，可以进入正式发布链路</td>
+            </tr>
+            <tr>
+              <td>上线回归</td>
+              <td>真实环境视觉、交互、权限、数据状态、服务路径和响应式表现</td>
+              <td>最终效果与销售服务平台设计意图一致，关键路径无阻塞</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-head">
+        <h2>AI 输入资产</h2>
+        <p>输入越结构化，销售服务平台的 AI 产出越稳定。建议把以下资料沉淀为标准化模板。</p>
+      </div>
+      <div class="grid cols-2">
+        <article class="card">
+          <h3>工程上下文</h3>
+          <ul>
+            <li>销售服务平台 Git 代码库与当前分支</li>
+            <li>已有页面、路由、组件库、样式变量和设计 token</li>
+            <li>表格、筛选、弹窗、表单、图表、权限等通用模式</li>
+            <li>接口 mock、状态枚举、空/加载/异常状态约定</li>
+          </ul>
+        </article>
+        <article class="card">
+          <h3>销售服务与产品上下文</h3>
+          <ul>
+            <li>历史 PRD 与本期最新销售服务需求</li>
+            <li>客户、学生、课程、学习记录、出勤、续报、沟通记录等数据字典</li>
+            <li>销售服务端设计规范：颜色、字体、间距、组件使用规则</li>
+            <li>文案风格、服务术语、异常/空/加载状态说明</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section id="value">
+      <div class="section-head">
+        <h2>对销售服务平台团队的价值</h2>
+        <p>这不是简单“让 AI 画界面”，而是把销售服务业务、设计原型、工程实现和评审协作前置到同一条链路里。</p>
+      </div>
+      <div class="grid cols-4">
+        <article class="card">
+          <h3>更快验证</h3>
+          <p>从 PRD 到可操作服务端 Demo 的时间缩短，产品、设计、研发可围绕真实销售服务体验讨论。</p>
+        </article>
+        <article class="card">
+          <h3>更少失真</h3>
+          <p>直接基于销售服务平台代码库和组件体系生成，减少设计稿到研发实现之间的信息损耗。</p>
+        </article>
+        <article class="card">
+          <h3>更懂销售服务</h3>
+          <p>每个页面都回到销售服务任务路径，避免只做“看起来像后台”的泛化界面。</p>
+        </article>
+        <article class="card">
+          <h3>更强复盘</h3>
+          <p>把高频销售服务场景、组件模式和评审标准持续沉淀为销售服务平台 SOP。</p>
+        </article>
+      </div>
+
+      <div class="card highlight" style="margin-top:18px;">
+        <p class="quote">“销售服务平台的 AI 工作流，不只是生成一个页面，而是生成一个能被销售服务人员使用、能被设计评审、能被研发审核、能沉淀为客户服务资产的真实版本。”</p>
+        <div class="pill-list">
+          <span class="pill">销售服务平台</span>
+          <span class="pill">需求理解</span>
+          <span class="pill">组件复用</span>
+          <span class="pill">服务路径验证</span>
+          <span class="pill">Vibe Coding</span>
+          <span class="pill">研发评审</span>
+          <span class="pill">上线回归</span>
+          <span class="pill">服务复盘</span>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div>销售服务平台 · AI 服务工作流与 UI/UX 设计闭环</div>
+      <div>建议作为销售服务平台团队 SOP 持续沉淀与迭代</div>
+    </footer>
+  </div>
+</body>
+</html>
