@@ -10,8 +10,11 @@
   --primary: #c7ff22;
   --primary-soft: rgba(199, 255, 34, 0.13);
   --page-gradient:
-    radial-gradient(ellipse 38rem 120% at -8% 34%, rgba(58, 7, 39, 0.62) 0%, rgba(38, 5, 29, 0.36) 34%, transparent 68%),
-    linear-gradient(90deg, #0a0b0f 0%, #08090d 44%, #07080b 100%);
+    radial-gradient(ellipse 58rem 42rem at -10% 12%, rgba(34, 211, 238, 0.1), transparent 68%),
+    radial-gradient(ellipse 50rem 38rem at 105% 38%, rgba(99, 102, 241, 0.11), transparent 70%),
+    radial-gradient(ellipse 42rem 32rem at 8% 78%, rgba(199, 255, 34, 0.045), transparent 72%),
+    radial-gradient(ellipse 46rem 38rem at 82% 96%, rgba(139, 92, 246, 0.07), transparent 72%),
+    linear-gradient(180deg, #0a0c11 0%, #08090d 48%, #090a10 100%);
   --border: rgba(245, 245, 242, 0.13);
   --border-strong: rgba(245, 245, 242, 0.26);
   --focus: #d8ff5a;
@@ -347,7 +350,10 @@ h3 {
 .hero-media::after {
   position: absolute;
   inset: 0;
-  background: rgba(8, 8, 8, 0.48);
+  background:
+    radial-gradient(ellipse 50% 64% at 4% 8%, rgba(34, 211, 238, 0.07), transparent 72%),
+    radial-gradient(ellipse 48% 60% at 96% 18%, rgba(99, 102, 241, 0.065), transparent 74%),
+    rgba(8, 8, 8, 0.48);
   content: "";
 }
 
@@ -376,7 +382,7 @@ h3 {
 .hero-content {
   position: relative;
   z-index: 2;
-  width: min(800px, 66vw);
+  width: min(1180px, 92vw);
 }
 
 .eyebrow,
@@ -393,8 +399,8 @@ h3 {
 }
 
 .hero h1 {
-  max-width: 960px;
-  font-size: clamp(56px, 8.2vw, 126px);
+  max-width: none;
+  font-size: clamp(56px, 7.5vw, 120px);
   font-weight: 700;
   line-height: 0.92;
   text-transform: uppercase;
@@ -408,6 +414,7 @@ h3 {
 
 .hero-title-text {
   display: block;
+  white-space: nowrap;
   transform-origin: left bottom;
   will-change: transform;
 }
@@ -1268,7 +1275,7 @@ h3 {
   }
 
   .hero-content {
-    width: min(720px, 65vw);
+    width: 100%;
   }
 
   .work-grid {
@@ -1351,7 +1358,7 @@ h3 {
   }
 
   .hero h1 {
-    font-size: clamp(46px, 14vw, 82px);
+    font-size: clamp(42px, 12.5vw, 72px);
   }
 
   .hero-copy {
@@ -1409,7 +1416,7 @@ h3 {
   }
 
   .hero h1 {
-    font-size: clamp(42px, 14.5vw, 68px);
+    font-size: clamp(38px, 12vw, 60px);
   }
 
   .hero-subtitle {
