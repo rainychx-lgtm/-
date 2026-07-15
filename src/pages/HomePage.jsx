@@ -79,7 +79,7 @@ export default function HomePage() {
                 <div><span>当前身份</span><strong>UI / UX / Experience Designer</strong></div>
                 <div><span>服务方向</span><strong>B端 / C端 / AI Workflow</strong></div>
                 <div><span>项目类型</span><strong>在线教育 / AI 产品 / 体验升级</strong></div>
-                <div><span>协作方式</span><strong>Research / Prototype / Design System</strong></div>
+                <div><span>个人优势</span><strong>AI 提效 / 用户体验 / 动效与动画 / 剪辑</strong></div>
               </div>
               <div className="work-stats" aria-label="经历数据">
                 <div><strong>10+</strong><span>年设计经验</span></div>
