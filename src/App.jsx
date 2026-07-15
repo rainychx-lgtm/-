@@ -24,7 +24,7 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    const title = route.type === "case" ? `${route.item.title}｜柴华鑫作品集` : route.type === "home" ? "柴华鑫｜体验设计师作品集" : "页面未找到｜柴华鑫作品集";
+    const title = route.type === "case" ? `${route.item.title}｜柴化鑫作品集` : route.type === "home" ? "柴化鑫｜体验设计师作品集" : "页面未找到｜柴化鑫作品集";
     document.title = title;
   }, [route]);
 

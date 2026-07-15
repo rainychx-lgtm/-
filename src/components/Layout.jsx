@@ -9,7 +9,7 @@ export default function Layout({ isHome, children }) {
       <Header isHome={isHome} />
       {children}
       <footer className="site-footer">
-        <p>© {new Date().getFullYear()} 柴华鑫 · 体验设计师作品集</p>
+        <p>© {new Date().getFullYear()} 柴化鑫 · 体验设计师作品集</p>
         <Link href={isHome ? "/#home" : "/#projects"}>{isHome ? "回到顶部" : "返回项目案例"}</Link>
       </footer>
     </>

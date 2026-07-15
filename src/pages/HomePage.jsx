@@ -69,7 +69,7 @@ export default function HomePage() {
           </div>
           <div className="work-grid">
             <div className="work-visual">
-              <img src="/assets/work-experience-visual-portrait.jpg" width="1200" height="1200" loading="lazy" decoding="async" alt="柴华鑫个人视觉形象" />
+              <img src="/assets/work-experience-visual-portrait.jpg" width="1200" height="1200" loading="lazy" decoding="async" alt="柴化鑫个人视觉形象" />
             </div>
             <div className="work-copy">
               <p className="eyebrow"><span aria-hidden="true" />ABOUT ME</p>
