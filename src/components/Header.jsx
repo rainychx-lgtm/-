@@ -37,8 +37,8 @@ export default function Header({ isHome }) {
   return (
     <header className={`site-header${scrolled ? " is-scrolled" : ""}`}>
       <Link className="brand" href="/#home" aria-label="返回首页">
-        <span className="brand-mark">XD</span>
-        <span className="brand-text">EXPERIENCE DESIGNER</span>
+        <img className="brand-mark" src="/assets/chai-logo.png" width="44" height="44" alt="" />
+        <span className="brand-text">CHAI.DESIG</span>
       </Link>
 
       <button
