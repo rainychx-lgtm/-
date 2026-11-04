@@ -35,14 +35,13 @@ export default function HomePage() {
       <main id="main-content">
         <section className="hero" id="home">
           <div className="hero-media" aria-hidden="true">
-            <video
-              src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260331_045634_e1c98c76-1265-4f5c-882a-4276f2080894.mp4"
-              poster="/assets/hero-workspace.png"
-              autoPlay
-              loop
-              muted
-              playsInline
-              preload="metadata"
+            <img
+              src="/assets/hero-portfolio.png"
+              width="2560"
+              height="1440"
+              alt=""
+              fetchPriority="high"
+              decoding="async"
             />
           </div>
           <div className="hero-grid" aria-hidden="true" />
@@ -53,7 +52,6 @@ export default function HomePage() {
               <span className="hero-title-line"><span className="hero-title-text">DESIGNER</span></span>
             </h1>
             <p className="hero-subtitle">把复杂体验，设计成清晰可信的产品系统。</p>
-            <p className="hero-copy">我是一名 UI、UX 与体验设计师，关注从问题定义、用户旅程、界面系统到 AI 辅助工作流的完整设计过程。</p>
             <div className="hero-actions">
               <Link className="button primary" href="/#projects">查看项目</Link>
               <Link className="button secondary" href="/#contact">联系合作</Link>
