@@ -48,6 +48,12 @@ export const caseStudies = [
     thumbnail: "/assets/case-ai-companion-new.png",
     thumbnailSize: [752, 539],
     images: ["/assets/ai-companion-detail/cover.jpg", ...aiCompanionImages],
+    video: {
+      afterImage: aiCompanionImages[22],
+      src: "/assets/ai-companion-detail/bgm-demo.mp4",
+      poster: "/assets/ai-companion-detail/bgm-demo-poster.jpg",
+      title: "AI 学伴 BGM 视频展示",
+    },
   },
   {
     slug: "ux-upgrade",

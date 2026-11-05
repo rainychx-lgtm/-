@@ -1186,7 +1186,8 @@ h3 {
   gap: 24px;
 }
 
-.case-gallery img {
+.case-gallery img,
+.case-gallery .case-video {
   width: 100%;
   height: auto;
   object-fit: contain;
@@ -1196,6 +1197,12 @@ h3 {
   box-shadow: var(--glass-shadow);
   backdrop-filter: blur(var(--glass-blur));
   -webkit-backdrop-filter: blur(var(--glass-blur));
+}
+
+.case-gallery .case-video {
+  display: block;
+  max-height: 80vh;
+  background: #080b13;
 }
 
 .not-found {

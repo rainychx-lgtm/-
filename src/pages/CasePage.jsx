@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { Fragment, useEffect } from "react";
 import Layout from "../components/Layout";
 
 export default function CasePage({ item }) {
@@ -14,18 +14,32 @@ export default function CasePage({ item }) {
           <h1 id="case-title">{item.title}</h1>
           <p>{item.category} · {String(item.images.length).padStart(2, "0")} SCREENS</p>
         </section>
-        <section className="case-gallery" aria-label={`${item.title}图片展示`}>
+        <section className="case-gallery" aria-label={`${item.title}作品展示`}>
           {item.images.map((src, index) => (
-            <img
-              key={src}
-              src={src}
-              width="1920"
-              height="1080"
-              loading={index === 0 ? "eager" : "lazy"}
-              fetchPriority={index === 0 ? "high" : "auto"}
-              decoding="async"
-              alt={`${item.title}案例图 ${index + 1}`}
-            />
+            <Fragment key={src}>
+              <img
+                src={src}
+                width="1920"
+                height="1080"
+                loading={index === 0 ? "eager" : "lazy"}
+                fetchPriority={index === 0 ? "high" : "auto"}
+                decoding="async"
+                alt={`${item.title}案例图 ${index + 1}`}
+              />
+              {item.video?.afterImage === src && (
+                <video
+                  className="case-video"
+                  controls
+                  playsInline
+                  preload="none"
+                  poster={item.video.poster}
+                  aria-label={item.video.title}
+                >
+                  <source src={item.video.src} type="video/mp4" />
+                  您的浏览器不支持视频播放，<a href={item.video.src}>下载视频</a>。
+                </video>
+              )}
+            </Fragment>
           ))}
         </section>
       </main>
