@@ -2,6 +2,7 @@ import { useLayoutEffect, useRef } from "react";
 import BorderGlow from "../components/BorderGlow";
 import HoloCard from "../components/HoloCard";
 import GradientText from "../components/GradientText";
+import SpecularPanel from "../components/SpecularPanel";
 import Layout from "../components/Layout";
 import Link from "../components/Link";
 import { caseStudies } from "../data/cases";
@@ -153,13 +154,13 @@ export default function HomePage() {
         <section className="contact-section" id="contact" aria-labelledby="contact-title">
           <p className="section-display-title"><GradientText colors={["#22d5ff", "#c0f6ff"]} animationSpeed={2} variant="flow" glow={0.15}>CONTACT</GradientText> <span aria-hidden="true">↘</span></p>
           <div className="contact-copy"><p className="eyebrow"><span aria-hidden="true" />CONTACT / 03</p><h2 id="contact-title">让我们聊聊产品体验、AI 设计流程，或下一次合作。</h2></div>
-          <div className="contact-panel">
+          <SpecularPanel className="contact-panel" radius={21} lineColor="#ffffff" baseColor="#525252" intensity={1} idleIntensity={0.35} shineSize={10} shineFade={34} thickness={1.2} glow={1} followMouse proximity={250}>
             <p>CONTACT</p>
             <dl>
               <div><dt>微信</dt><dd>chaihuaxin</dd></div>
               <div><dt>邮箱</dt><dd><a href="mailto:rainychx@126.com">rainychx@126.com</a></dd></div>
             </dl>
-          </div>
+          </SpecularPanel>
         </section>
       </main>
     </Layout>
